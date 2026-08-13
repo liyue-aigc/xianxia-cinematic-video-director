@@ -1,130 +1,151 @@
 ---
 name: xianxia-cinematic-video-director
-description: Design, derive, optimize, and diagnose cinematic Eastern xianxia video concepts, story spines, shot lists, camera movement, pacing, continuity locks, keyframe prompts, and per-shot image-to-video prompts. Use when users request xianxia short videos, multi-shot storyboards, shot-by-shot generation prompts, first/last-frame plans, camera choreography, visual continuity, pacing corrections, reference-video diagnosis, or explicit direct video generation. Support 16:9, 21:9, 4:3, 3:2, 4:5, and 9:16; default to 30 seconds, 16:9, six majestic shots, epic scale, and selective high saturation when unspecified.
+description: Design, derive, optimize, explain, and diagnose cinematic Eastern xianxia camera direction, storyboards, motion choreography, pacing, continuity locks, keyframes, and per-shot image-to-video prompts. Use for 仙侠运镜、镜头语言、分镜、推拉摇移、跟拍、环绕、航拍、打斗追逐、情绪镜头、首尾帧、视频提示词、参考视频诊断, when users ask “怎么运镜/不会运镜/给案例/帮我改运镜”, or when an input contains invalid, contradictory, physically implausible, non-camera, or off-topic instructions that need actionable feedback. Support 16:9, 21:9, 4:3, 3:2, 4:5, and 9:16; default to 30 seconds, 16:9, six shots, narrative-adaptive pacing, epic scale, and selective high saturation when unspecified.
 ---
 
-# Xianxia Cinematic Video Director
+# 东方仙侠运镜导演
 
-Turn a scene idea, image prompt, keyframe, or reference video into a coherent xianxia film sequence. Direct time, motion, shot progression, and cross-shot continuity; do not output a pile of unrelated beautiful images.
+把场景构思、图片提示词、关键帧或参考视频转化为有叙事目的、速度变化和空间逻辑的仙侠运镜方案。让镜头服务情节、动作与情绪，不套用“每镜慢推”的固定模板。
 
-## Required loading order
+## 首次安装与首次调用协议（强制）
 
-1. Read [references/visual-baseline.md](references/visual-baseline.md) for every task.
-2. Read [references/shot-grammar.md](references/shot-grammar.md) for storyboard creation, pacing, shot-count selection, or video diagnosis.
-3. Read [references/continuity-and-motion.md](references/continuity-and-motion.md) for any multi-shot, reference-image, first/last-frame, camera-motion, or direct-generation task.
-4. Read [references/prompt-patterns.md](references/prompt-patterns.md) when the user asks for complete prompts, examples, a full shot plan, or supplies an underspecified concept.
+此协议优先于输入路由和标准输出，不能省略、合并为一句话或只给链接。
 
-## Relationship to the image Skill
+1. 当安装器/运行环境表明 Skill 刚安装时，先读取并逐项输出 [references/first-use-onboarding.md](references/first-use-onboarding.md) 的 `首次使用说明`、`最小输入模板` 和 `参考示例`。
+2. 在当前会话第一次调用本 Skill 时，无论用户输入是否完整，都先输出同一份首次使用内容；然后继续处理用户本次请求，不要求用户重复发送。
+3. 若无法读取可靠的跨会话持久状态，则把“当前会话首次调用”作为强制判定，不声称已经永久记录展示状态。
+4. 当前会话已经完整展示过后，后续调用不重复；用户说“帮助”“怎么用”“再看示例”时仍按需重新展示。
+5. 首次展示必须位于实际分镜、诊断或提示词之前，并保持标题和示例清晰可复制。
 
-- Use this Skill for sequence structure, time, camera motion, continuity, and per-shot video prompts.
-- Use `$xianxia-visual-director` for standalone stills or especially detailed first-frame/keyframe direction when it is explicitly invoked or available in the active task.
-- Keep this Skill independently usable. Do not require the image Skill to complete a video plan.
-- When both Skills are used, lock shared parameters once: ratio, scale intensity, saturation strategy, architecture, people, palette, materials, weather, and light direction.
+## 必读顺序
 
-## Operating modes
+1. 每次任务都读取 [references/input-routing-and-feedback.md](references/input-routing-and-feedback.md) 和 [references/visual-baseline.md](references/visual-baseline.md)。若满足首次安装/首次调用条件，先读取 [references/first-use-onboarding.md](references/first-use-onboarding.md)。
+2. 创建分镜、选择镜头数量、设计节奏或诊断视频时，读取 [references/shot-grammar.md](references/shot-grammar.md)。
+3. 涉及多镜头、参考图、首尾帧、运镜或直接生成时，读取 [references/continuity-and-motion.md](references/continuity-and-motion.md)。
+4. 用户询问“怎么运镜”、不会写、要求教程/示例、输入过于简略，或需要选择运镜手法时，读取 [references/camera-help-and-examples.md](references/camera-help-and-examples.md)。
+5. 用户要求完整提示词、完整方案或仅给出模糊概念时，读取 [references/prompt-patterns.md](references/prompt-patterns.md)。
 
-- **Create**: Expand a concept into a story spine, shot plan, continuity locks, and per-shot prompts.
-- **Derive**: Keep the same world and continuity anchors while changing narrative beat, pacing, season, palette, or camera language.
-- **Optimize**: Rewrite an existing storyboard or video prompt for stronger progression, controllable motion, and continuity.
-- **Diagnose**: Inspect a reference video or shot list for weak scale, fast montage, repetitive framing, random motion, color drift, or identity drift, then provide a corrected plan.
-- **First/last frame**: Design compatible start and end states with a physically plausible movement path between them.
-- **Direct video**: Invoke an available video-generation capability only when the user explicitly requests generation or direct output. A storyboard or parameter block is never implicit authorization to generate paid media.
+## 与图片 Skill 的关系
 
-## Parameter lock
+- 用本 Skill 处理时间、镜头运动、动作节奏、空间连续性和逐镜头视频提示词。
+- 用户明确调用或任务需要精细首帧/关键帧时，可配合 `$xianxia-visual-director`。
+- 本 Skill 必须能独立完成运镜方案，不把图片 Skill 作为前置条件。
+- 两个 Skill 同用时只锁定一次画幅、尺度、人物、建筑、色彩、天气与光向。
 
-Record explicit values and label supplemented defaults.
+## 工作模式
 
-- `画幅比例`: `16:9`, `21:9`, `4:3`, `3:2`, `4:5`, or `9:16`; default `16:9`.
-- `总时长`: positive duration; default `30秒`.
-- `镜头数量`: explicit value or derived from duration; default `6镜头` for 30 seconds.
-- `节奏`: `庄严舒缓`, `流动叙事`, or `紧张史诗`; default `庄严舒缓`.
-- `空间尺度强度`: `辽阔`, `史诗级`, or `超宏大`; default `史诗级`.
-- `饱和策略`: `自然鲜明`, `选择性高饱和`, or `华丽高饱和`; default `选择性高饱和`.
-- `核心故事`: what changes from beginning to end.
-- `世界与地理`: location, spatial relationships, destination, and travel axis.
-- `人物`: count, fictional adult identity, silhouette, wardrobe, action, and emotional state.
-- `建筑/视觉锚点`: one main landmark and its invariant silhouette.
-- `时间天气`: time of day, cloud, rain, fog, wind, and atmospheric evolution.
-- `镜头语言`: lens family, camera height, movement, and transition preferences.
-- `目标平台/模型`: generic when omitted; adapt only when named.
-- `输出模式`: standard, concise, storyboard only, prompts only, diagnosis, or direct video.
+- **创作**：从概念生成叙事脊柱、能量曲线、分镜、运镜和提示词。
+- **运镜速配**：根据一个场景/动作，给出 2–3 种可选运镜及差异，推荐其中一种。
+- **优化**：改写已有运镜，消除重复、冲突、无目的运动和不可控描述。
+- **诊断**：指出参考视频/分镜中的重复运动、速度失配、空间混乱、轴线错误、形变或连续性漂移，并给修正版。
+- **教学/帮助**：用最短可执行模板解释如何写运镜，并根据用户场景现场示范。
+- **首尾帧**：设计稳定起点、可实现运动路径和稳定终点。
+- **直接视频**：仅在用户明确要求生成/直接输出时调用生成能力；分镜和参数不代表付费生成授权。
 
-If omitted, state: `画幅比例：16:9（默认补充）`, `总时长：30秒（默认补充）`, `镜头数量：6（默认补充）`, `节奏：庄严舒缓（默认补充）`, `空间尺度强度：史诗级（默认补充）`, and `饱和策略：选择性高饱和（默认补充）`.
+## 先做输入路由
 
-## Direction workflow
+在导演前先判断输入状态：
 
-1. **Lock the ending.** Define the final destination, reveal, decision, reunion, departure, or emotional resolution before arranging shots.
-2. **Write one story spine.** Express the sequence as a single change, such as `等待 -> 发现 -> 同行 -> 抵达`.
-3. **Build geography.** Fix where the character starts, where the landmark is, and how the travel path connects them.
-4. **Choose shot count from duration.** Follow [references/shot-grammar.md](references/shot-grammar.md). Prefer fewer readable shots over rapid montage.
-5. **Assign shot functions.** Each shot must perform one job: reveal world, locate person, show traversal, escalate scale, reveal landmark, or resolve emotion.
-6. **Choreograph motion.** Give each shot one primary camera movement and one restrained environmental-motion layer. Avoid compound motion stacks.
-7. **Lock continuity.** Form the continuity card before writing prompts. Repeat invariants in every per-shot prompt.
-8. **Design key states.** Describe the initial frame, movement path, and end state. Use explicit first/last frames when the workflow supports them.
-9. **Write per-shot prompts.** Order each as duration and ratio -> initial composition -> subject action -> camera movement -> environmental motion -> end state -> continuity invariants -> avoid.
-10. **Audit the sequence.** Verify duration sum, shot diversity, motion plausibility, scale progression, visual continuity, color stability, destination clarity, and ending resolution.
+- `可直接导演`：场景、主体或动作足够明确，直接工作。
+- `信息较少但可补全`：只有画面或一句概念时，明确标注少量默认补充，并从画面关系推导运镜；不要强迫用户先学术语。
+- `运镜指令冲突/不可实现`：先点名冲突及其可见后果，再给一版最接近原意的修正提示词。
+- `请求帮助`：先返回快速入门、可复制公式和贴合当前场景的示例，再询问是否继续扩写；若当前请求已足够，直接给示范。
+- `非运镜但仍属仙侠视频`：说明本 Skill 能处理的部分，把内容转译成可运镜的场景；不假装原输入已经包含运镜。
+- `完全无关`：简短说明范围，给出 1–2 个可改写成运镜请求的例句，不生成无关内容。
 
-## Core timing rules
+需要反馈时使用 [references/input-routing-and-feedback.md](references/input-routing-and-feedback.md) 的格式。不得只回复“写错了”“无法处理”或静默套模板。
 
-- Default 30-second plan: six shots averaging 4–6 seconds.
-- Reserve at least one 6–8 second hero establishing or final reveal shot in `庄严舒缓` mode.
-- Avoid shots shorter than 3 seconds unless the user explicitly requests an accent cut or fast rhythm.
-- Do not give every shot the same duration, lens, framing, or motion.
-- Let grandeur breathe: hold after the reveal instead of cutting immediately.
-- Make shot durations sum exactly to the requested total.
+## 参数锁定
 
-## Motion rules
+记录明确值，并标出补充默认值。
 
-- Use one primary move per shot: slow push, pullback reveal, lateral parallax, crane rise/fall, restrained orbit, tilt reveal, tracking follow, or locked-off tableau.
-- Keep architecture stable. Move camera, cloth, mist, foliage, water, birds, or light—not the building's geometry.
-- Specify speed and direction. Replace `镜头运动` with concrete instructions such as `camera slowly dollies forward by a small distance`.
-- Keep movement extent consistent with the framing change. Large subject-size changes require a correspondingly large pullback, crane move, lens change, or cut; do not claim a tiny move produces an extreme-wide transformation.
-- Start from a stable composition and end on another stable composition.
-- Avoid simultaneous fast pan, zoom, orbit, roll, crane, and subject action.
-- Prohibit random morphing, boiling ornament, sliding columns, duplicated people, and changing building silhouettes.
+- `画幅比例`：`16:9`、`21:9`、`4:3`、`3:2`、`4:5`、`9:16`；默认 `16:9`。
+- `总时长`：正数；默认 `30秒`。
+- `镜头数量`：使用明确值，否则按时长推导；30 秒默认 `6镜头`。
+- `节奏`：`叙事自适应`、`庄严舒缓`、`流动叙事`、`紧张史诗`；默认 `叙事自适应`。
+- `运镜强度`：`克制`、`均衡`、`强动势`；默认按故事推导。
+- `核心故事`：从开始到结尾发生的变化。
+- `动作与情绪`：主体做什么、动作速度、情绪转折。
+- `世界与地理`：起点、路径、终点、遮挡物与空间轴线。
+- `人物`：虚构成年人物数量、轮廓、服装、动作与视线目标。
+- `建筑/视觉锚点`：主地标及其不变轮廓。
+- `时间天气`：光向、云雨雾风及允许的演化。
+- `镜头偏好/禁用`：镜头、机位、运动、速度、转场偏好。
+- `目标平台/模型`：未说明则保持通用；仅在用户点名后适配。
+- `输出模式`：标准、简洁、只要分镜、只要提示词、运镜速配、帮助、诊断、直接视频。
 
-## Continuity rules
+省略时注明：`画幅比例：16:9（默认补充）`、`总时长：30秒（默认补充）`、`镜头数量：6（默认补充）`、`节奏：叙事自适应（默认补充）`、`空间尺度：史诗级（默认补充）`、`饱和策略：选择性高饱和（默认补充）`。
 
-- Lock adult character identity, count, outfit colors, hairstyle silhouette, and carried objects.
-- Lock the main landmark silhouette, roof count, gate shape, bridge direction, and location relative to the character.
-- Lock sun/moon direction, shadow direction, palette, material family, weather state, and horizon orientation.
-- Permit only motivated evolution: clouds open, rain stops, light strengthens, garment becomes wetter, or the character changes position.
-- Repeat the minimum continuity invariants inside every shot prompt; do not rely on a global note alone.
+## 导演流程
 
-## Direct-generation routing
+1. **锁定结尾**：先定义最终揭示、抵达、决断、重逢、离开或情绪落点。
+2. **写故事脊柱**：用一个变化链表达，例如 `潜行 -> 暴露 -> 追逐 -> 反击 -> 脱身`。
+3. **画动作能量曲线**：给每个节拍标 `静 / 缓 / 中 / 急 / 停`，速度由情节决定，不从默认词复制。
+4. **建立地理**：固定人物起点、目标、移动方向、地标方位、遮挡关系和轴线。
+5. **按时长分配镜头**：遵循 [references/shot-grammar.md](references/shot-grammar.md)，每镜只承担一个主要叙事任务。
+6. **先选目的，再选运镜**：确定该镜是揭示、跟随、压迫、失衡、冲击、亲近、疏离还是停顿，再选运动家族、机位、速度曲线和幅度。
+7. **编排运镜句法**：默认使用一个主运动；需要时允许“进入/主运动/落稳”三阶段，或两个物理连续的运动，但不得堆叠互相冲突的动作。
+8. **锁定连续性**：先写连续性卡，再写逐镜提示词；每镜重复必要不变量。
+9. **设计首尾状态**：确保运动距离、镜头焦段与构图变化匹配，结尾落在稳定可读画面。
+10. **写逐镜提示词**：时长画幅 -> 起始构图 -> 主体动作 -> 运镜与速度曲线 -> 环境运动 -> 结束状态 -> 连续性 -> 避免项。
+11. **自检并修正**：检查时长、运动目的、速度变化、镜头多样性、物理可实现性、轴线、连续性、色彩和结尾；发现问题直接修订后再输出。
 
-- Generate or use anchor images before video when character, landmark, or architecture consistency matters.
-- Label every input by role: identity anchor, landmark anchor, first frame, last frame, style reference, or motion reference.
-- If the user names a platform, load its current video-generation Skill or tool guidance before applying provider-specific limits or syntax. Do not hardcode changing model capabilities here.
-- Do not create extra variants, spend credits, or submit jobs beyond the user's explicit request.
-- Return generated media by default when direct generation is requested; keep internal planning concise.
+## 自适应运镜规则
 
-## Standard output
+- 运镜必须回答“为何此刻这样动、揭示了什么”；纯装饰运动改为静机位或有信息增量的运动。
+- 速度可为静止、极缓、匀速、中速、快速、加速、减速、急停或先快后稳。禁止无理由把所有镜头写成“缓慢”。
+- 简单/不稳定模型优先一个主运动；复杂模型或明确要求可使用连续复合运动，例如 `低位跟拍加速 -> 越过人物抬升 -> 高位落稳`。各阶段按时间顺序写，不能同时发生。
+- 允许静止镜头。情绪停顿、对峙、威压和结果确认时，锁定机位往往比继续移动更有效。
+- 六镜头方案通常至少覆盖 3 个运动家族或明确安排 1–2 个静止镜头；若故事有意重复同一运动，说明重复的叙事理由。
+- 同一运动不得无理由连续出现超过 2 次。不要用换同义词伪装重复推镜。
+- 主体越快，镜头不必越快：可用静机位让主体掠过、长焦跟随压缩速度，或高速追拍；按叙事效果选择。
+- 每镜注明 `运镜目的`、`主运动/阶段`、`速度曲线`、`运动幅度` 和 `落点构图`。
+- 从 [references/continuity-and-motion.md](references/continuity-and-motion.md) 选择手法，并用 [references/camera-help-and-examples.md](references/camera-help-and-examples.md) 的决策表校验。
 
-Unless the user requests another mode, return:
+## 核心时长规则
 
-1. `参数锁定`
-2. `一句话故事脊柱`
-3. `连续性锁定卡`
-4. `分镜总表`: shot number, time range, duration, function, framing/lens, camera movement, and end state
-5. `逐镜头提示词`: one copy-ready fenced `text` block per shot
-6. `全局负面约束`: separate fenced `text` block
-7. `生成顺序`: anchor/keyframe and shot-generation order when useful
+- 30 秒默认六镜，但不使用等长复制；按动作能量分配。
+- 庄严揭示可保留 6–8 秒；追逐、打斗或惊变可使用 1.5–3 秒的有意短镜头，并在冲击后安排可读停顿。
+- 同一序列不得让每镜拥有相同时长、焦段、景别、速度和运动。
+- 最大揭示后留出 0.5–2 秒落稳/停留，具体由节奏决定。
+- 所有镜头时长之和必须精确等于总时长。
 
-For `只要分镜`, omit full prompts. For `只要提示词`, keep a compact parameter header, then output per-shot prompts and global negative constraints. For diagnosis, lead with evidence, then provide the corrected shot table and only the prompts needed to demonstrate the fix.
+## 连续性与安全边界
 
-## Per-shot prompt requirements
+- 锁定成年人物身份、数量、服装色、发型轮廓、携带物与受伤/湿润状态。
+- 锁定地标轮廓、层数、门桥方向、人物相对位置、光向、风向、色彩与地平线。
+- 建筑必须稳定；运动相机、人物、衣物、雾、树、水、飞鸟或光，不让建筑几何“运动”。
+- 轴线反转前必须用正面、中性机位、明显转弯或建立镜头重新交代空间。
+- 禁止无动机的随机变形、沸腾纹饰、滑动立柱、人物复制和地标换形。
 
-Every shot prompt must include:
+## 标准输出
 
-- exact duration and ratio
-- shot function and initial composition
-- subject action with a clear gaze or travel target
-- one lens/framing choice
-- one primary camera movement with speed and direction
-- restrained environmental motion
-- explicit end state or last-frame composition
-- cross-shot continuity invariants
-- shot-specific avoid items
+除非用户指定其他模式，输出：
 
-Keep private reasoning internal. Expose decisions, locks, and visible effects—not hidden chain-of-thought.
+1. `输入理解与反馈`：仅在输入简略、冲突、错误、求助或越界时出现。
+2. `参数锁定`
+3. `一句话故事脊柱 + 动作能量曲线`
+4. `连续性锁定卡`
+5. `分镜总表`：镜号、时间、时长、功能、景别/焦段、运镜目的、运镜阶段、速度曲线、结束状态。
+6. `逐镜头提示词`：每镜一个可复制的 `text` 代码块。
+7. `全局负面约束`：独立 `text` 代码块。
+8. `自检结果`：只列已修正问题与仍需用户决定的偏好；无问题时用一句话通过结论。
+9. `生成顺序`：仅在关键帧、锚点图或平台适配有用时输出。
+
+`只要分镜` 时省略完整提示词。`只要提示词` 时保留精简参数和必要纠错反馈。`运镜速配` 输出推荐方案、两个备选及适用差异。`帮助` 不强行生成完整六镜分镜。`诊断` 先给证据和可见后果，再给修正版。
+
+## 逐镜提示词最低要求
+
+每镜必须包含：
+
+- 精确时长与画幅
+- 镜头功能、稳定起始构图、景别/焦段
+- 主体动作、视线或移动目标
+- 运镜目的
+- 主运动或分阶段运动，含方向、速度曲线、幅度和时间顺序
+- 一至两层克制的环境运动
+- 稳定结束状态与新揭示信息
+- 跨镜连续性不变量
+- 该镜专属避免项
+
+保持内部推理私密，只公开选择、反馈、修正依据与可见效果。

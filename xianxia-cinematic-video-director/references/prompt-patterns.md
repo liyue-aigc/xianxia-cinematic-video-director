@@ -3,12 +3,10 @@
 ## Minimal input
 
 ```text
-核心故事：一名旅人在崖畔等待同伴，最终二人共同走向天宫
-总时长：30秒（省略时默认）
+核心场景：一名剑修穿过竹林，察觉身后追兵后御剑冲出峡谷
+总时长：15秒（省略时默认30秒）
 画幅比例：16:9（省略时默认）
-空间尺度强度：史诗级（省略时默认）
-饱和策略：选择性高饱和（省略时默认）
-节奏：庄严舒缓（省略时默认）
+节奏：叙事自适应（省略时默认）
 输出模式：标准
 ```
 
@@ -17,28 +15,27 @@
 ```text
 总时长：30秒
 画幅比例：21:9
-镜头数量：6
-节奏：庄严舒缓
-核心故事：等待 -> 发现 -> 同行 -> 抵达
-起点：崖畔苍松下的白玉平台
-路径：悬空长桥
+镜头数量：7
+节奏：紧张史诗
+运镜强度：强动势，但建筑必须稳定
+核心故事：潜行 -> 察觉 -> 追逐 -> 反击 -> 脱身 -> 望见天门
+起点：雨夜竹林石阶
+路径：狭窄峡谷与悬空索桥
 终点：云海尽头的巨型天门
-人物：两名虚构成年旅人，月白与孔雀青长衣，背影为主
-视觉锚点：横跨天际的朱红与白玉天门
-空间尺度强度：超宏大
-饱和策略：选择性高饱和
-主色：天青、月白、松绿；朱红和暖金局部强调
-光线：清晨右侧低角度侧逆光
-镜头偏好：缓慢横移揭示、跟随、最终远景停留；不要快速推拉
+人物：一名虚构成年剑修，月白长衣，右手持剑
+视觉锚点：朱红与白玉天门
+光线：右后方冷月光；剑光仅作青色局部强调
+镜头偏好：低位跟拍、静机位掠过、一次俯冲航拍；结尾落稳
+禁用：全程慢推、随机旋转、建筑形变
 输出模式：标准
 ```
 
 ## Standard shot table
 
 ```text
-| 镜头 | 时间 | 时长 | 功能 | 景别/镜头 | 主运动 | 结束状态 |
-|---|---|---:|---|---|---|---|
-| 01 | 00:00–00:05 | 5s | 世界揭示 | 极远景 / 28mm | 横向视差揭示 | 人物和远处天门同时可见 |
+| 镜头 | 时间 | 时长 | 功能 | 景别/焦段 | 运镜目的 | 运镜阶段 | 速度曲线 | 结束状态 |
+|---|---|---:|---|---|---|---|---|---|
+| 01 | 00:00–00:04 | 4s | 建立威胁 | 低位广角 / 28mm | 用速度反差表现追兵逼近 | 静机位，人物由远及近掠过前景 | 静止相机 + 快速主体 | 追兵剑光进入画面深处 |
 ```
 
 ## Per-shot prompt pattern
@@ -48,37 +45,38 @@ Shot <number>, <duration>, <ratio>.
 Function: <one shot function>.
 Initial composition: <stable first frame, scale relationship, lens and framing>.
 Subject action: <one readable action chain and gaze/travel target>.
-Camera movement: <one move, direction, speed, extent; explicitly prohibit incompatible moves>.
+Motion purpose: <what the camera movement makes the viewer feel or learn>.
+Camera choreography: <one dominant move or ordered phases with direction, speed curve, extent, and timing; prohibit incompatible simultaneous moves>.
 Environmental motion: <one or two restrained layers>.
 End state: <stable last-frame composition and newly revealed information>.
 Continuity invariants: <character, landmark, geography, light, palette, weather>.
 Avoid: <shot-specific geometry, identity, motion, and color failures>.
 ```
 
-## Compact 30-second spine example
+## Compact 30-second adaptive spine example
 
-Story: `等待 -> 察觉 -> 相遇 -> 同行 -> 仰望 -> 共同赴天宫`.
+Story: `潜行 -> 暴露 -> 追逐 -> 失衡 -> 反击 -> 脱身 -> 远望天门`.
 
-| Shot | Duration | Function | Direction |
+| Shot | Duration | Function | Camera energy |
 |---|---:|---|---|
-| 01 | 5s | World reveal | lateral parallax through a giant pine; show person and distant gate |
-| 02 | 4s | Human scale | slow pullback from sleeve and profile silhouette to cliff platform |
-| 03 | 5s | Discovery | gaze-matched cut; second traveler appears along the suspended bridge |
-| 04 | 5s | Traversal | stable tracking follow as both walk toward the same destination |
-| 05 | 4s | Scale escalation | low-angle tilt from tiny travelers to off-frame heavenly gate |
-| 06 | 7s | Resolution | wide pullback and settle; hold both travelers beneath the immense gate |
+| 01 | 5s | Establish rainy bamboo geography | crane fall at medium-slow speed, then hold |
+| 02 | 3s | Reveal pursuit | locked low frame; swordsman and pursuers cross at high speed |
+| 03 | 4s | Pursuit | accelerating trailing track through the path |
+| 04 | 3s | Near-fall | short controlled handheld and downward tilt; abrupt stop |
+| 05 | 4s | Counterattack | 120-degree arc track timed to one sword sweep |
+| 06 | 4s | Escape | aerial rise following the sword flight, medium-fast to slow |
+| 07 | 7s | Destination reveal | pullback reveal, decelerate, hold the heavenly gate for 2 seconds |
 
-The example supplies rhythm, not mandatory imagery. Change setting, actions, and landmark to match the user.
+This example demonstrates an energy curve, not mandatory imagery. Change movement families when the story requires stillness, dialogue, ritual, romance, horror, or scale discovery.
 
 ## Global negative-constraint pattern
 
 ```text
-No unrelated location changes, character duplication, outfit drift, face drift, landmark redesign, changing roof count, reversed bridge direction, sun-direction change, palette drift, random weather reset, or geography discontinuity.
+No unrelated location changes, character duplication, outfit or face drift, landmark redesign, reversed bridge direction without an axis reset, sun-direction change, palette drift, random weather reset, or geography discontinuity.
 
-No rapid montage in majestic mode, no shot shorter than 3 seconds without intent, no identical push-in on every shot, no simultaneous pan + zoom + orbit + roll, no fast camera shake, no random speed ramps, no unstable first or last frame.
+No identical movement on every shot, no universal slow push, no unjustified speed ramp, no simultaneous pan + zoom + orbit + roll + crane, no unreadable horizon, no random shake, and no unstable first or last frame.
 
-No melting architecture, sliding columns, boiling ornament, morphing carvings, broken perspective, fisheye distortion, rubber limbs, duplicated hands, floating garments without wind logic, or clouds moving in conflicting directions.
+No melting architecture, sliding columns, boiling ornament, morphing carvings, broken perspective, fisheye distortion, rubber limbs, duplicated hands, floating garments without wind logic, or conflicting cloud directions.
 
-No global orange-gold wash, equal-intensity saturated colors, neon clouds, crushed black shadows, gray fog that erases the destination, plastic jade, excessive gilding, text, subtitles, logos, or watermarks.
+No global orange-gold wash, equal-intensity saturated colors, neon clouds, crushed shadows, destination-erasing fog, plastic jade, excessive gilding, text, subtitles, logos, or watermarks.
 ```
-

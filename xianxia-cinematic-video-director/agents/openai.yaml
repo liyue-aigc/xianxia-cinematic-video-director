@@ -1,4 +1,4 @@
 interface:
-  display_name: "东方仙侠电影视频导演"
-  short_description: "生成东方仙侠电影分镜、镜头运动、连续性锁定与逐镜头视频提示词"
-  default_prompt: "使用 $xianxia-cinematic-video-director 把我的仙侠场景构思扩展成默认 30 秒、16:9 的电影分镜与逐镜头视频提示词。"
+  display_name: "东方仙侠运镜导演"
+  short_description: "按剧情自适应设计仙侠运镜，支持教程、纠错、案例与分镜提示词"
+  default_prompt: "使用 $xianxia-cinematic-video-director；如果这是首次调用，请先展示使用方法、最小输入模板和参考示例，再根据我的仙侠场景自适应设计运镜。"

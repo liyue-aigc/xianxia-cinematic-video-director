@@ -7,7 +7,7 @@ Apply these principles to every shot while allowing shot size and motion to chan
 - Ratio: `16:9`
 - Scale intensity: `史诗级`
 - Saturation strategy: `选择性高饱和`
-- Pace: `庄严舒缓`
+- Pace: `叙事自适应`；按动作与情绪在静止、舒缓、流动、迅疾之间变化
 - Adult figures: fictional unless authorized references are supplied
 
 ## Visual identity
@@ -47,5 +47,5 @@ For `超宏大`, ensure the sequence as a whole contains four scale bands even w
 - Large buildings but weak grandeur: use known-size comparison, partial off-frame structures, extreme distance, and longer holds.
 - Over-saturated montage: localize accents and preserve neutral clouds/jade across every shot.
 - Generic motion: assign a movement that reveals new information.
+- Repeated slow motion: rebuild the action-energy curve, then vary speed, movement family, or use a purposeful locked shot.
 - AI instability: simplify subject action, reduce compound camera motion, and repeat invariants.
-

@@ -2,7 +2,7 @@
 
 ## Duration routing
 
-Use the user's shot count when explicit. Otherwise derive a calm readable plan:
+Use the user's shot count when explicit. Otherwise derive a readable plan, then adapt individual durations to the action-energy curve:
 
 - 10–15 seconds: 3 shots
 - 16–24 seconds: 4–5 shots
@@ -10,20 +10,20 @@ Use the user's shot count when explicit. Otherwise derive a calm readable plan:
 - 36–45 seconds: 7–8 shots
 - 46–60 seconds: 9–11 shots
 
-Aim for 4–6 seconds per normal shot. Give a hero reveal or ending 6–8 seconds in majestic mode. Make durations sum exactly to the total.
+Use 4–6 seconds for normal narrative shots. A hero reveal may take 6–8 seconds. A chase, impact, surprise, or sword exchange may use intentional 1.5–3 second shots, followed by a readable settle or reaction. Make durations sum exactly to the total.
 
 ## Default 30-second structure
 
 | Shot | Typical duration | Function | Preferred scale |
 |---|---:|---|---|
-| 1 | 5s | Reveal world and geography | extreme wide or framed wide |
-| 2 | 4s | Locate the adult character and emotional state | wide or medium-wide |
-| 3 | 5s | Show travel axis or approach | tracking wide |
-| 4 | 5s | Escalate architectural or natural scale | low-angle or telephoto wide |
-| 5 | 4s | Deliver relational/emotional beat | medium-wide, restrained motion |
-| 6 | 7s | Reveal destination and hold resolution | hero wide, slow settle |
+| 1 | 4–6s | Reveal world, threat, or immediate objective | extreme wide, framed wide, or action entry |
+| 2 | 3–5s | Locate the adult character and emotional/action state | wide or medium-wide |
+| 3 | 3–6s | Show travel, pursuit, discovery, or approach | tracking, static pass-by, or reveal |
+| 4 | 2–6s | Escalate scale, danger, magic, or conflict | low-angle, telephoto, aerial, or dynamic wide |
+| 5 | 3–5s | Deliver reaction, reversal, or relational beat | detail to medium-wide; movement may stop |
+| 6 | 5–8s | Resolve, reveal destination, or land the consequence | hero wide, decisive close, or stable hold |
 
-Adapt functions to the story; do not mechanically copy locations.
+Adapt functions, durations, and motion energy to the story; do not mechanically copy this order.
 
 ## Shot functions
 
@@ -33,6 +33,7 @@ Adapt functions to the story; do not mechanically copy locations.
 - **Scale escalation**: Introduce the largest landmark or off-frame structure.
 - **Emotional beat**: Pause for waiting, recognition, decision, reunion, or departure.
 - **Resolution**: Hold the destination, changed relationship, or final world truth.
+- **Impact/reversal**: Compress time around a strike, reveal, interruption, or sudden power shift.
 
 Every shot should perform one primary function. Combine two only when they reinforce the same beat.
 
@@ -66,6 +67,6 @@ Use lens changes to reveal different spatial truths while keeping geography cons
 
 - If the average shot is under 3 seconds in a majestic piece, combine repetitive shots.
 - If every shot is 5 seconds with the same movement, vary function and scale rather than duration alone.
+- If every movement is slow, distinguish whether the scene needs suspenseful stillness, readable flow, rapid pursuit, impact, or deceleration; rewrite the energy curve before choosing moves.
 - If the sequence feels static, add purposeful character travel or a reveal movement, not random camera activity.
 - If the story is unclear, rewrite the spine before adding shots.
-
